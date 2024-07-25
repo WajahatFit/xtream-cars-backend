@@ -9,7 +9,7 @@ const carRoutes = require("./routes/car");
 connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4511;
 
 // Middleware
 app.use(bodyParser.json());
