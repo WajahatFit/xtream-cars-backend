@@ -1,31 +1,51 @@
-// app.js
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-require("dotenv").config();
-const connectDB = require("./config/db");
-const carRoutes = require("./routes/car");
-const dotenv = require("dotenv");
+require('dotenv').config();
+require('./db');
+const createError = require('http-errors');
+const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
+const errorHandler = require('./middlewares/errorHandler');
 
-dotenv.config();
-connectDB();
+// Routers require
+const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth');
 
 const app = express();
-const PORT = process.env.PORT || 4511;
 
-// Middleware
-app.use(bodyParser.json());
-app.use(cors());
-app.use("/api/cars", carRoutes);
+// cookies and loggers
+app.use(cors({
+  origin: process.env.ORIGIN
+}));
+app.set('trust proxy', 1);
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   next();
+// })
 
-// Simple route
-app.get("/", (req, res) => {
-  res.send("Welcome to the Car Marketplace API");
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// routes intro
+app.use('/', indexRouter);
+app.use('/api/v1/auth', authRouter);
+app.use(errorHandler);
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// error handler
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  if (err.status === 404) {
+    res.status(err.status || 404);
+  } else {
+    res.status(err.status || 500);
+  }
 });
 
 module.exports = app;
