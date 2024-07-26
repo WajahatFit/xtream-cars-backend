@@ -5,7 +5,9 @@ const cors = require("cors");
 require("dotenv").config();
 const connectDB = require("./config/db");
 const carRoutes = require("./routes/car");
+const dotenv = require("dotenv");
 
+dotenv.config();
 connectDB();
 
 const app = express();
@@ -25,3 +27,5 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = app;
