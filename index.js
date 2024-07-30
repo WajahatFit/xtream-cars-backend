@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -12,10 +13,10 @@ app.use(express.urlencoded({ extended: false }));
 
 //DB
 
+const MONGO_URI = process.env.MONGO_URL;
+
 mongoose
-  .connect(
-    "mongodb+srv://ironhack2024:Ironhack2024@backenddbtest.di3nypz.mongodb.net/Node-Api?retryWrites=true&w=majority&appName=backendDbtest"
-  )
+  .connect(MONGO_URI)
   .then((x) => {
     console.log(
       `Connected to Mongo! Database name: "${x.connections[0].name}"`
@@ -39,10 +40,13 @@ app.set("trust proxy", 1);
 
 // Routers require
 const indexRouter = require("./routes/index");
-
+const authRouter = require("./routes/auth");
 //routes intro
 app.use("/api/cars", indexRouter);
+app.use("/api/v1/auth", authRouter);
 app.use(errorHandler);
+
+// ROUTES FOR USER
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

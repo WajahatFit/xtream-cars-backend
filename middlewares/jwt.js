@@ -1,5 +1,6 @@
 const { expressjwt: jwt } = require("express-jwt");
 const ErrorResponse = require("../utils/error");
+const TOKEN_SECRET = process.env.TOKEN_SECRET;
 
 // Function used to extract the JWT token from the request's 'Authorization' Headers
 function getTokenFromHeaders(req) {
@@ -17,7 +18,7 @@ function getTokenFromHeaders(req) {
 }
 
 const isAuthenticated = jwt({
-  secret: process.env.TOKEN_SECRET,
+  secret: TOKEN_SECRET,
   algorithms: ["HS256"],
   requestProperty: "payload",
   getToken: getTokenFromHeaders, //token
