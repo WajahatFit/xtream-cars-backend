@@ -1,10 +1,24 @@
-const router = require('express').Router();
+const router = require("express").Router();
+const {
+  getCars,
+  getSingleCar,
+  addCar,
+  updateCar,
+  deleteCar,
+} = require("../controller/car");
 
-// @desc    Index page for the API
-// @route   GET /api/v1/
-// @access  Public
-router.get('/', async (req, res, next) => {;
-  res.send('REST API')
-});
+// GET ALL THE CARS
+router.get("/", getCars);
+// CREATE CARS
+router.post("/", addCar);
+
+//GET A SINGLE CAR
+router.get("/:id", getSingleCar);
+// update a car
+router.put("/:id", updateCar);
+
+// delete car
+
+router.delete("/:id", deleteCar);
 
 module.exports = router;
