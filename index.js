@@ -32,6 +32,7 @@ app.use(
     origin: process.env.ORIGIN,
   })
 );
+
 app.set("trust proxy", 1);
 // app.use((req, res, next) => {
 //   res.setHeader('Access-Control-Allow-Origin', '*');
